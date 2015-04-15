@@ -39,3 +39,11 @@ def eval_list exp
   exp.map { |e| _eval e }
 end
 
+
+def immediate_val? exp
+  num? exp
+end
+
+def num? exp
+  exp.is_a? Numeric
+end
