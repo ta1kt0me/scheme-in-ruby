@@ -16,3 +16,13 @@ end
 def list? exp
   exp.is_a? Array
 end
+
+def lookup_primitive_fun exp
+  $primitive_fun_env[exp]
+end
+
+$primitive_fun_env = {
+  :+ => [:prim, lambda{|x, y| x + y}],
+  :- => [:prim, lambda{|x, y| x - y}],
+  :* => [:prim, lambda{|x, y| x * y}]
+}
