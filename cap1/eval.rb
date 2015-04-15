@@ -26,3 +26,11 @@ $primitive_fun_env = {
   :- => [:prim, lambda{|x, y| x - y}],
   :* => [:prim, lambda{|x, y| x * y}]
 }
+
+def car list
+  list[0]
+end
+
+def cdr list
+  list[1..-1]
+end
