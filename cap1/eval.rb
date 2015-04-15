@@ -47,3 +47,12 @@ end
 def num? exp
   exp.is_a? Numeric
 end
+
+def apply fun, args
+  apply_primitive_fun fun, args
+end
+
+def apply_primitive_fun fun, args
+  fun_val = fun[1]
+  fun_val.call *args
+end
