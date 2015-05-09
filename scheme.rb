@@ -1,9 +1,8 @@
 require './cap1/eval.rb'
 require './cap2/env.rb'
 
-puts car [1,2,3]
+exp = [:let, [[:x, 3]],
+  [:let, [[:fun, [:lambda, [:y], [:+, :x, :y]]]],
+    [:+, [:fun, 1], [:fun, 2]]]]
+puts _eval(exp, $global_env)
 
-[:let, [[:x, 2]],
- [:let, [[:fun, [:lambda, [], :x]]],
-  [:let, [[:x,1]],
-    [:fun]]]]
