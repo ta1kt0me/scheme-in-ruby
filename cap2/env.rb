@@ -12,7 +12,7 @@ end
 
 def eval_let exp, env
   parameters, args, body = let_to_parameters_args_body exp
-  new_exp = [[:lambda, paramters, body]] + args
+  new_exp = [[:lambda, parameters, body]] + args
   _eval(new_exp, env)
 end
 
@@ -25,7 +25,7 @@ def let? exp
 end
 
 def eval_lambda exp, env
-  make_closure exp. env
+  make_closure exp, env
 end
 
 def make_closure exp, env
