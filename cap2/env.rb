@@ -1,3 +1,4 @@
+require 'byebug'
 
 def lookup_var var, env
   alist = env.find {|alist| alist.key? var }
@@ -13,6 +14,9 @@ end
 def eval_let exp, env
   parameters, args, body = let_to_parameters_args_body exp
   new_exp = [[:lambda, parameters, body]] + args
+  puts "---#{__method__}---"
+  puts "@ exp: #{new_exp}"
+  puts "@ env: #{env}\n\n"
   _eval(new_exp, env)
 end
 
@@ -36,6 +40,9 @@ end
 def lambda_apply closure, args
   parameters, body, env = closure_parameters_body_env closure
   new_env = extend_env parameters, args, env
+  puts "---#{__method__}---"
+  puts "@ exp: #{body}"
+  puts "@ env: #{new_env}\n\n"
   _eval body, new_env
 end
 
