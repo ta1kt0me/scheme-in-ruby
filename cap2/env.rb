@@ -11,6 +11,8 @@ def extend_env parameters, args, env
   [alist.to_h] + env
 end
 
+# ======
+# let
 def eval_let exp, env
   parameters, args, body = let_to_parameters_args_body exp
   new_exp = [[:lambda, parameters, body]] + args
@@ -26,6 +28,13 @@ end
 
 def let? exp
   exp[0] == :let
+end
+# ======
+
+# ======
+# lambda
+def lambda? exp
+  exp[0] == :lambda
 end
 
 def eval_lambda exp, env
@@ -49,4 +58,5 @@ end
 def closure_parameters_body_env closure
   [closure[1], closure[2], closure[3]]
 end
+# ======
 

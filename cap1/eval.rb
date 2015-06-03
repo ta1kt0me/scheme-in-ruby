@@ -18,12 +18,18 @@ def _eval exp, env
   end
 end
 
-def special_form? exp
-  lambda?(exp) or let?(exp) or letrec?(exp) or if?(exp)
+def car list
+  list[0]
 end
 
-def lambda? exp
-  exp[0] == :lambda
+def cdr list
+  list[1..-1]
+end
+
+# ======
+# special_form
+def special_form? exp
+  lambda?(exp) or let?(exp) or letrec?(exp) or if?(exp)
 end
 
 def eval_special_form exp, env
@@ -37,10 +43,13 @@ def eval_special_form exp, env
     eval_if exp, env
   end
 end
+# ======
 
+# ======
+# letrec
 def eval_letrec exp, env
   parameters, args, body = letrec_to_parameters_args_body exp
-  tmp_env = Hash.new
+  tmp_env = {}
   parameters.each do |parameter|
     tmp_env[parameter] = :dummy
   end
@@ -64,7 +73,10 @@ end
 def letrec? exp
   exp[0] == :letrec
 end
+# ======
 
+# ======
+# if
 def eval_if exp, env
   cond, true_clause, false_clause = if_to_cond_true_false exp
   if _eval cond, env
@@ -81,9 +93,54 @@ end
 def if? exp
   exp[0] == :if
 end
+# ======
+
+
+
+# ======
+# list
+def eval_list exp, env
+  exp.map do |e|
+    puts "---#{__method__}---"
+    puts "@ exp: #{e}"
+    puts "@ env: #{env}\n\n"
+    _eval e, env
+  end
+end
 
 def list? exp
   exp.is_a? Array
+end
+# ======
+
+# ======
+# num
+def immediate_val? exp
+  num? exp
+end
+
+def num? exp
+  exp.is_a? Numeric
+end
+# ======
+
+def apply fun, args
+  if primitive_fun? fun
+    apply_primitive_fun fun, args
+  else
+    lambda_apply fun, args
+  end
+end
+
+# ======
+# primitive
+def primitive_fun? exp
+  exp[0] == :prim
+end
+
+def apply_primitive_fun fun, args
+  fun_val = fun[1]
+  fun_val.call *args
 end
 
 def lookup_primitive_fun exp
@@ -103,45 +160,5 @@ $primitive_fun_env = {
 
 $boolean_env = [:true => true, :false => false]
 $global_env = [$primitive_fun_env, $boolean_env]
+# ======
 
-def car list
-  list[0]
-end
-
-def cdr list
-  list[1..-1]
-end
-
-def eval_list exp, env
-  exp.map do |e|
-    puts "---#{__method__}---"
-    puts "@ exp: #{e}"
-    puts "@ env: #{env}\n\n"
-    _eval e, env
-  end
-end
-
-def immediate_val? exp
-  num? exp
-end
-
-def num? exp
-  exp.is_a? Numeric
-end
-
-def apply fun, args
-  if primitive_fun? fun
-    apply_primitive_fun fun, args
-  else
-    lambda_apply fun, args
-  end
-end
-
-def primitive_fun? exp
-  exp[0] == :prim
-end
-
-def apply_primitive_fun fun, args
-  fun_val = fun[1]
-  fun_val.call *args
-end
